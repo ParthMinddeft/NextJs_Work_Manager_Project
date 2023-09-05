@@ -1,12 +1,21 @@
-import mongoose from "mongoose"
-import { User } from "@/models/user"
+import mongoose from "mongoose";
+import { User } from "@/models/user";
 
-export const connectDB = async() => {
+const config = {
+  isConnected: 0,
+};
+
+export const connectDB = async () => {
+  if (config.isConnected) {
+    return;
+  }
   try {
-    const {connection} = await mongoose.connect(process.env.MONGO_DB_URL,{
-      dbName:'work_manager',
-    })
-    console.log("db connected")
+    const { connection } = await mongoose.connect(process.env.MONGO_DB_URL, {
+      dbName: "work_manager",
+    });
+    console.log("db connected");
+    console.log(connection.readyState);
+    config.isConnected = connection.readyState;
 
     // const user = new User({
     //   name:'test name',
@@ -17,11 +26,11 @@ export const connectDB = async() => {
 
     // await user.save()
 
-    console.log('user is created')
+    // console.log('user is created')
 
-    console.log(connection.host)
+    console.log(connection.host);
   } catch (error) {
-    console.log("Connection Failed")
-    console.log(error)
+    console.log("Connection Failed");
+    console.log(error);
   }
-}
+};
